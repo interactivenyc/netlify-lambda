@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and press save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    constructor() {
+        super();
+        this.state = {
+            message: 'Default Message'
+        };
+    }
+
+    fetchMessage = async () => {
+        console.log('fetchMessage');
+
+        let message = await axios.get('/.netlify/functions/hello');
+        console.log('message', message.data);
+        this.setState({ message: message.data });
+    };
+
+    render() {
+        return (
+            <div className="App">
+                <header className="App-header">
+                    <p>Message: {this.state.message}</p>
+                    <button onClick={this.fetchMessage}>Click for Message</button>
+                </header>
+            </div>
+        );
+    }
 }
 
 export default App;
